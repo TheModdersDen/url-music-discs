@@ -45,7 +45,7 @@ public class YoutubeDL {
 
         // https://stackoverflow.com/questions/5711084/java-runtime-getruntime-getting-output-from-executing-a-command-line-program
 
-        if (SystemUtils.IS_OS_LINUX) {
+        if (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC) {
             Runtime.getRuntime().exec("chmod +x " + YoutubeDL);
         }
 

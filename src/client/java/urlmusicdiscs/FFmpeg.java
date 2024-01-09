@@ -54,7 +54,7 @@ public class FFmpeg {
         }
     }
 
-    static String executeFFmpegCommand(String arguments) throws IOException, InterruptedException {
+    static void executeFFmpegCommand(String arguments) throws IOException, InterruptedException {
         File FFmpegDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/ffmpeg/").toAbsolutePath().toFile();
 
         String fileName = SystemUtils.IS_OS_WINDOWS ? "ffmpeg.exe" : "ffmpeg";
@@ -63,7 +63,7 @@ public class FFmpeg {
 
         // https://stackoverflow.com/questions/5711084/java-runtime-getruntime-getting-output-from-executing-a-command-line-program
 
-        if (SystemUtils.IS_OS_LINUX) {
+        if (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC) {
             Runtime.getRuntime().exec("chmod +x " + FFmpeg);
         }
 
@@ -71,6 +71,5 @@ public class FFmpeg {
 
         resultProcess.waitFor();
 
-        return "";
     }
 }

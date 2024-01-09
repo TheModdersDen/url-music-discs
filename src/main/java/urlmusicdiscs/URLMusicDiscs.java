@@ -76,8 +76,8 @@ public class URLMusicDiscs implements ModInitializer {
 				return;
 			}
 
-			if (!urlName.startsWith("https://youtu.be") && !urlName.startsWith("https://www.youtube.com") && !urlName.startsWith("https://youtube.com")  && !urlName.startsWith("https://cdn.discordapp.com")) {
-				player.sendMessage(Text.literal("Song URL must be a Youtube or a Discord CDN URL!"));
+			if (!urlName.startsWith("https://youtu.be") || !urlName.startsWith("https://www.youtube.com") || !urlName.startsWith("https://youtube.com") || !urlName.startsWith("https://")) {
+				player.sendMessage(Text.literal("Song URL must be a YouTube link or a valid HTTPS URL to a song file!"));
 				return;
 			}
 

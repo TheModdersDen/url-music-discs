@@ -15,6 +15,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Objects;
+
 public class MusicDiscScreen extends Screen {
     private static final Identifier TEXTURE = new Identifier(URLMusicDiscs.MOD_ID, "textures/gui/record_input.png");
     private static final Identifier TEXT_FIELD_TEXTURE = new Identifier("minecraft", "container/anvil/text_field");
@@ -22,7 +24,7 @@ public class MusicDiscScreen extends Screen {
 
     int backgroundWidth = 176;
     int backgroundHeight = 44;
-    String inputDefaultText =  "URL";
+    String inputDefaultText;
 
     protected MusicDiscScreen(Text title, PlayerEntity player, ItemStack item, String inputDefaultText) {
         super(title);
@@ -69,7 +71,10 @@ public class MusicDiscScreen extends Screen {
                 ClientPlayNetworking.send(URLMusicDiscs.CUSTOM_RECORD_SET_URL, bufInfo);
             }
 
-            this.client.player.closeHandledScreen();
+            assert Objects.requireNonNull(this.client).player != null;
+            if (this.client.player != null) {
+                this.client.player.closeHandledScreen();
+            }
         }
         if (this.nameField.keyPressed(keyCode, scanCode, modifiers) || this.nameField.isActive()) {
             return true;
@@ -87,7 +92,7 @@ public class MusicDiscScreen extends Screen {
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);;
+        context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
         context.drawGuiTexture(TEXT_FIELD_TEXTURE, x + 59, y + 14, 110, 16);
 
         if (this.nameField == null) {

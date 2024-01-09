@@ -8,7 +8,6 @@ import net.minecraft.block.JukeboxBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.JukeboxBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.MusicDiscItem;
@@ -45,7 +44,7 @@ public class URLDiscItem extends MusicDiscItem {
             return ActionResult.PASS;
         }
 
-        if (blockState.get(JukeboxBlock.HAS_RECORD).booleanValue()) {
+        if (blockState.get(JukeboxBlock.HAS_RECORD)) {
             return ActionResult.PASS;
         }
 
@@ -54,8 +53,7 @@ public class URLDiscItem extends MusicDiscItem {
         if (!world.isClient) {
             PlayerEntity playerEntity = context.getPlayer();
             BlockEntity blockEntity = world.getBlockEntity(blockPos);
-            if (blockEntity instanceof JukeboxBlockEntity) {
-                JukeboxBlockEntity jukeboxBlockEntity = (JukeboxBlockEntity)blockEntity;
+            if (blockEntity instanceof JukeboxBlockEntity jukeboxBlockEntity) {
                 jukeboxBlockEntity.setStack(itemStack.copy());
                 world.emitGameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Emitter.of(playerEntity, blockState));
             }
@@ -72,7 +70,7 @@ public class URLDiscItem extends MusicDiscItem {
 
             String musicUrl = nbtInfo.getString("music_url");
 
-            if (musicUrl != null && !musicUrl.equals("")) {
+            if (musicUrl != null && !musicUrl.isEmpty()) {
                 PacketByteBuf bufInfo = PacketByteBufs.create();
                 bufInfo.writeBlockPos(blockPos);
                 bufInfo.writeString(musicUrl);

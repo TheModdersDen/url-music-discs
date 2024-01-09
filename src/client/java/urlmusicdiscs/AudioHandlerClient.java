@@ -21,18 +21,14 @@ public class AudioHandlerClient {
             File audioOut = new File(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toString());
 
             try {
-                YoutubeDL.executeYoutubeDLCommand(String.format("--quiet -S res:144 -o \"%s\" %s", audioIn.getAbsolutePath().toString(), urlName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
+                YoutubeDL.executeYoutubeDLCommand(String.format("--quiet -S res:144 -o \"%s\" %s", audioIn.getAbsolutePath(), urlName));
+            } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
             try {
-                FFmpeg.executeFFmpegCommand(String.format("-i \"%s\" -c:a libvorbis -ac 1 -b:a 64k -vn -y -nostdin -nostats -loglevel 0 \"%s\"", audioIn.getAbsolutePath().toString(), audioOut.getAbsolutePath().toString()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
+                FFmpeg.executeFFmpegCommand(String.format("-i \"%s\" -c:a libvorbis -ac 1 -b:a 64k -vn -y -nostdin -nostats -loglevel 0 \"%s\"", audioIn.getAbsolutePath(), audioOut.getAbsolutePath()));
+            } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
 

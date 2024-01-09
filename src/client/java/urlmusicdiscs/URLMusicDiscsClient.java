@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class URLMusicDiscsClient implements ClientModInitializer {
 	HashMap<Vec3d, FileSound> playingSounds = new HashMap<>();
@@ -37,14 +38,15 @@ public class URLMusicDiscsClient implements ClientModInitializer {
 					client.getSoundManager().stop(currentSound);
 				}
 
-				if (fileUrl.equals("")) {
+				if (fileUrl.isEmpty()) {
 					return;
 				}
 
 				AudioHandlerClient audioHandler = new AudioHandlerClient();
 
 				if (!audioHandler.checkForAudioFile(fileUrl)) {
-					client.player.sendMessage(Text.literal("Downloading music, please wait a moment..."));
+                    assert client.player != null;
+                    client.player.sendMessage(Text.literal("Downloading music, please wait a moment..."));
 
 					try {
 						audioHandler.downloadVideoAsOgg(fileUrl).thenApply((in) -> {
@@ -60,12 +62,10 @@ public class URLMusicDiscsClient implements ClientModInitializer {
 
 							return null;
 						});
-					} catch (IOException e) {
-						client.player.sendMessage(Text.literal("Failed to download music!"));
-					} catch (InterruptedException e) {
+					} catch (IOException | InterruptedException e) {
 						client.player.sendMessage(Text.literal("Failed to download music!"));
 					}
-					return;
+                    return;
 				}
 
 				FileSound fileSound = new FileSound();
@@ -91,7 +91,7 @@ public class URLMusicDiscsClient implements ClientModInitializer {
 
 				String currentUrl = itemNbt.getString("music_url");
 
-				client.setScreen(new MusicDiscScreen(Text.translatable("test"), client.player, item, currentUrl != "" ? currentUrl : "URL"));
+				client.setScreen(new MusicDiscScreen(Text.translatable("test"), client.player, item, !Objects.equals(currentUrl, "") ? currentUrl : "URL"));
 			});
 		});
 	}
