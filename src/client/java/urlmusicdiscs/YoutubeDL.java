@@ -4,14 +4,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class YoutubeDL {
     static void checkForExecutable() throws IOException {
@@ -33,6 +30,8 @@ public class YoutubeDL {
             }
 
             Files.copy(fileStream, YoutubeDLDirectory.toPath().resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+        
+            fileStream.close();
         }
     }
 

@@ -62,10 +62,12 @@ public class URLMusicDiscsClient implements ClientModInitializer {
 
 							return null;
 						});
-					} catch (IOException | InterruptedException e) {
+					} catch (IOException e) {
 						client.player.sendMessage(Text.literal("Failed to download music!"));
+						
+					} catch (InterruptedException e) {
+						throw new RuntimeException(e);
 					}
-                    return;
 				}
 
 				FileSound fileSound = new FileSound();

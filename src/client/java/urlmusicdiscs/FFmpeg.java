@@ -14,7 +14,12 @@ public class FFmpeg {
     static void checkForExecutable() throws IOException {
         File FFmpegDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/ffmpeg/").toAbsolutePath().toFile();
 
-        FFmpegDirectory.mkdirs();
+        // Verify that the ffmpeg folder exists, and if it doesn't, create it:
+        try {
+            FFmpegDirectory.mkdirs();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         String fileName = SystemUtils.IS_OS_WINDOWS ? "ffmpeg.exe" : "ffmpeg";
 
@@ -25,19 +30,34 @@ public class FFmpeg {
 
             if (!FFmpegDirectory.toPath().resolve("ffmpeg.zip").toFile().exists()) {
                 if (SystemUtils.IS_OS_LINUX) {
-                    in = new URL("https://cdn.discordapp.com/attachments/1067144249612714036/1175188765711552592/ffmpeg.zip").openStream();
+                    in = new URL("https://tmd-tv-tech-2000.s3.us-west-2.amazonaws.com/MC-Misc/Mods/urlmusicdiscs/ffmpeg-linux.zip").openStream();
+
+                    Files.copy(in, FFmpegDirectory.toPath().resolve("ffmpeg.zip"), StandardCopyOption.REPLACE_EXISTING);
+
+                    if (!zipFile.exists()) {
+                        return;
+                    }
                 } else if (SystemUtils.IS_OS_MAC) {
                     in = new URL("https://evermeet.cx/ffmpeg/ffmpeg-6.1.zip").openStream();
+
+                    Files.copy(in, FFmpegDirectory.toPath().resolve("ffmpeg.zip"), StandardCopyOption.REPLACE_EXISTING);
+
+                    if (!zipFile.exists()) {
+                        return;
+                    }
                 } else if (SystemUtils.IS_OS_WINDOWS) {
                     in = new URL("https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip").openStream();
+
+                    Files.copy(in, FFmpegDirectory.toPath().resolve("ffmpeg.zip"), StandardCopyOption.REPLACE_EXISTING);
+
+                    if (!zipFile.exists()) {
+                        return;
+                    }
                 }
+                in.close();
             }
 
-            Files.copy(in, FFmpegDirectory.toPath().resolve("ffmpeg.zip"), StandardCopyOption.REPLACE_EXISTING);
-
-            if (!zipFile.exists()) {
-                return;
-            }
+            
 
             ZipInputStream zipInput = new ZipInputStream(new FileInputStream(zipFile));
 
@@ -51,6 +71,7 @@ public class FFmpeg {
             }
 
             zipFile.delete();
+            zipInput.close();
         }
     }
 

@@ -4,18 +4,13 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -24,13 +19,6 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import urlmusicdiscs.items.URLDiscItem;
-//import ws.schild.jave.EncoderException;
-
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class URLMusicDiscs implements ModInitializer {
 	public static final String MOD_ID = "urlmusicdiscs";
@@ -71,13 +59,13 @@ public class URLMusicDiscs implements ModInitializer {
 
 			String urlName = buf.readString();
 
-			if (urlName.length() >= 200) {
-				player.sendMessage(Text.literal("Song URL is too long!"));
+			if (URLMusicDiscs.validateURL(urlName) == false) {
+				player.sendMessage(Text.literal("Song URL must be a YouTube link or a valid HTTPS URL to a song file!"));
 				return;
 			}
 
-			if (!urlName.startsWith("https://youtu.be") || !urlName.startsWith("https://www.youtube.com") || !urlName.startsWith("https://youtube.com") || !urlName.startsWith("https://")) {
-				player.sendMessage(Text.literal("Song URL must be a YouTube link or a valid HTTPS URL to a song file!"));
+			if (urlName.length() >= 200) {
+				player.sendMessage(Text.literal("Song URL is too long!"));
 				return;
 			}
 
@@ -94,5 +82,21 @@ public class URLMusicDiscs implements ModInitializer {
 			currentItem.setNbt(currentNbt);
 		});
 	}
+
+	/*
+     * Validates whether a URL for a music disc is correct.
+     * If it is a valid URL, it returns true, otherwise, it returns false.
+     * 
+     * @param URL - The URL to validate.
+     * @returns boolean - Whether the URL is valid or not.
+     */
+    public static boolean validateURL(String URL) {
+        
+        if ((URL.startsWith("https://") || URL.startsWith("https://youtu.be") || URL.startsWith("https://www.youtube.com") || URL.startsWith("https://youtube.com")) && URL.length() <= 200) {
+			return true;
+        } else {
+            return false;
+        }
+    }
 }
 

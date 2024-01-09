@@ -8,10 +8,18 @@ import java.util.concurrent.CompletableFuture;
 public class AudioHandlerClient {
     public boolean checkForAudioFile(String urlName) {
         String hashedName = Hashing.Sha256(urlName);
-
-        File audio = new File(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toString());
-
-        return audio.exists();
+        
+        // Verify that the client_downloads folder exists, and if it doesn't, create it:
+        if (!FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/").toFile().exists()) {
+            FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/").toFile().mkdirs();
+        }
+        
+        // Verify that the audio file exists, and if it doesn't, return false:
+        if (!FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toFile().exists()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public CompletableFuture<Boolean> downloadVideoAsOgg(String urlName) throws IOException, InterruptedException {
@@ -19,6 +27,10 @@ public class AudioHandlerClient {
             String hashedName = Hashing.Sha256(urlName);
             File audioIn = new File(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".raw").toString());
             File audioOut = new File(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toString());
+            
+            if (urlName.isEmpty()) {
+                return false;
+            }
 
             try {
                 YoutubeDL.executeYoutubeDLCommand(String.format("--quiet -S res:144 -o \"%s\" %s", audioIn.getAbsolutePath(), urlName));
@@ -38,17 +50,17 @@ public class AudioHandlerClient {
 
     }
 
-    public InputStream getAudioInputStream(String urlName) {
-        String hashedName = Hashing.Sha256(urlName);
-        File audio = new File(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toString());
-
+    public InputStream getAudioInputStream(String urlName) throws IOException {
         InputStream fileStream;
         try {
+            String hashedName = Hashing.Sha256(urlName);
+            File audio = new File(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toString());
+
             fileStream = new FileInputStream(audio);
         } catch (FileNotFoundException e) {
             return null;
         }
-
+        fileStream.close();
         return fileStream;
     }
 }
