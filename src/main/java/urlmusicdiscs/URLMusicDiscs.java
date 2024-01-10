@@ -98,5 +98,14 @@ public class URLMusicDiscs implements ModInitializer {
             return false;
         }
     }
+
+	/*
+     * Check if the URL is a valid YouTube link using RegEx.
+     * @param URL
+     * @return boolean true if the URL is a valid YouTube link, false if it is not.
+     */
+    public static boolean isYouTubeLink(String URL) {
+        return URL.matches("^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$");
+    }
 }
 
