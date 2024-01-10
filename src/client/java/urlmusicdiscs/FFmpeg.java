@@ -92,5 +92,6 @@ public class FFmpeg {
 
         resultProcess.waitFor();
 
+        return;
     }
 }

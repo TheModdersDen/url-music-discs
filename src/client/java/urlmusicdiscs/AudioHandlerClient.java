@@ -57,23 +57,21 @@ public class AudioHandlerClient {
                     try {
                         InputStream in = new URL(urlName).openStream();
                         Files.copy(in, audioIn.toPath());
-                        in.close();
 
                         // Convert the audio file with the help of the FFMpeg executable and class:
                         try {
                             // deepcode ignore NoStringConcat: <please specify a reason of ignoring this>
                             FFmpeg.executeFFmpegCommand(String.format(
                                     "-i '" + audioIn.getAbsolutePath() + "' -c:a libvorbis -ac 1 -b:a 64k -vn -y -nostdin -nostats -loglevel 0 '" + audioOut.getAbsolutePath() + "'"));
-                            URLMusicDiscs.LOGGER.debug("'" + urlName + "'' has been downloaded and converted.");
+                            URLMusicDiscs.LOGGER.info("'" + urlName + "'' has been downloaded and converted.");
                             audioIn.delete();
-                            return true;
                         } catch (IOException | InterruptedException e) {
                             throw new RuntimeException(e);
                         }
 
                     } catch (IOException e) {
                         URLMusicDiscs.LOGGER.error("Failed to download audio file from the internet.");
-                        URLMusicDiscs.LOGGER.debug("URL: '" + urlName + ".'");
+                        URLMusicDiscs.LOGGER.info("URL: '" + urlName + ".'");
                         throw new RuntimeException(e);
                     }
                 }
@@ -85,7 +83,7 @@ public class AudioHandlerClient {
                     throw new RuntimeException(e);
                 }
             }
-            return null;
+            return true;
         });
 
     }
@@ -101,7 +99,7 @@ public class AudioHandlerClient {
         } catch (FileNotFoundException e) {
             return null;
         }
-        fileStream.close();
+        
         return fileStream;
     }
 }

@@ -42,7 +42,7 @@ public class SoundLoaderMixin {
 				if (inputStream == null) {
 					return null;
 				}
-
+				
 				return repeatInstantly ? new RepeatingAudioStream(OggAudioStream::new, inputStream) : new OggAudioStream(inputStream);
 			} catch (IOException iOException) {
 				throw new CompletionException(iOException);
