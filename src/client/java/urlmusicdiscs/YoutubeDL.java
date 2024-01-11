@@ -36,6 +36,7 @@ public class YoutubeDL {
     }
 
     static String executeYoutubeDLCommand(String arguments) throws IOException, InterruptedException {
+        URLMusicDiscs.LOGGER.info("Running yt-dlp with args: '" + arguments + "'");
         File YoutubeDLDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/youtubedl/").toAbsolutePath().toFile();
 
         String fileName = SystemUtils.IS_OS_WINDOWS ? "yt-dlp.exe" : "yt-dlp";

@@ -76,6 +76,9 @@ public class FFmpeg {
     }
 
     static void executeFFmpegCommand(String arguments) throws IOException, InterruptedException {
+
+        URLMusicDiscs.LOGGER.info("Running FFMPEG with args: '" + arguments + "'");
+
         File FFmpegDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/ffmpeg/").toAbsolutePath().toFile();
 
         String fileName = SystemUtils.IS_OS_WINDOWS ? "ffmpeg.exe" : "ffmpeg";
