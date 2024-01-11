@@ -13,6 +13,11 @@ import urlmusicdiscs.URLMusicDiscs;
 
 @Mixin(JukeboxBlockEntity.class)
 public class JukeboxMixin {
+
+	/**
+	 * Cancels the dropRecord method and sends a packet to the client to stop the music.
+	 * @param ci the callback info (CallbackInfo)
+	 */
 	@Inject(at = @At("TAIL"), method = "dropRecord", cancellable = true)
 	public void dropRecord(CallbackInfo ci) {
 		JukeboxBlockEntity jukebox = (JukeboxBlockEntity)(Object)this;

@@ -11,6 +11,11 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 public class YoutubeDL {
+
+    /**
+     * Check if the yt-dlp executable exists in the youtube-dl folder.
+     * @throws IOException if the yt-dlp executable cannot be downloaded
+     */
     static void checkForExecutable() throws IOException {
         File YoutubeDLDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/youtubedl/").toAbsolutePath().toFile();
 
@@ -35,7 +40,14 @@ public class YoutubeDL {
         }
     }
 
-    static String executeYoutubeDLCommand(String arguments) throws IOException, InterruptedException {
+    /**
+     * Executes a command with yt-dlp.
+     * @param arguments the arguments to pass to yt-dlp
+     * @return the output of the command
+     * @throws IOException 
+     * @throws InterruptedException
+     */
+    public static String executeYoutubeDLCommand(String arguments) throws IOException, InterruptedException {
         URLMusicDiscs.LOGGER.info("Running yt-dlp with args: '" + arguments + "'");
         File YoutubeDLDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/youtubedl/").toAbsolutePath().toFile();
 

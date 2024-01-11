@@ -21,18 +21,49 @@ import org.slf4j.LoggerFactory;
 import urlmusicdiscs.items.URLDiscItem;
 
 public class URLMusicDiscs implements ModInitializer {
+
+	/**
+	 * The mod ID.
+	 */
 	public static final String MOD_ID = "urlmusicdiscs";
+
+	/**
+	 * The mod Logger.
+	 */
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	/**
+	 * The Custom Record Packet Identifier.
+	 */
 	public static final Identifier CUSTOM_RECORD_PACKET_ID = new Identifier(MOD_ID, "play_sound");
+
+	/**
+	 * The Custom Record GUI Identifier.
+	 */
 	public static final Identifier CUSTOM_RECORD_GUI = new Identifier(MOD_ID, "record_gui");
+
+	/**
+	 * The Custom Record Set URL Identifier.
+	 */
 	public static final Identifier CUSTOM_RECORD_SET_URL = new Identifier(MOD_ID, "record_set_url");
+
+	/**
+	 * The Placeholder Sound Identifier.
+	 */
 	public static final Identifier PLACEHOLDER_SOUND_IDENTIFIER = new Identifier(MOD_ID, "placeholder_sound");
+
+	/**
+	 * The Placeholder Sound Event.
+	 */
 	public static final SoundEvent PLACEHOLDER_SOUND = Registry.register(
 			Registries.SOUND_EVENT,
 			PLACEHOLDER_SOUND_IDENTIFIER,
 			SoundEvent.of(PLACEHOLDER_SOUND_IDENTIFIER)
 	);
+
+	/**
+	 * The Custom Record Item.
+	 */
 	public static final Item CUSTOM_RECORD = Registry.register(
 			Registries.ITEM,
 			new Identifier(MOD_ID, "custom_record"),
@@ -41,7 +72,9 @@ public class URLMusicDiscs implements ModInitializer {
 			)
 	);
 
-
+	/**
+	 * Initialize the mod.
+	 */
 	@Override
 	public void onInitialize() {
 		// Register the Custom Record to the Tools Item Group
@@ -59,7 +92,7 @@ public class URLMusicDiscs implements ModInitializer {
 
 			String urlName = buf.readString();
 
-			if (URLMusicDiscs.validateURL(urlName) == false) {
+			if (URLMusicDiscs.validateURL(urlName)) {
 				player.sendMessage(Text.literal("Song URL must be a YouTube link or a valid HTTPS URL to a song file!"));
 				return;
 			}
@@ -83,29 +116,24 @@ public class URLMusicDiscs implements ModInitializer {
 		});
 	}
 
-	/*
+	/**
      * Validates whether a URL for a music disc is correct.
      * If it is a valid URL, it returns true, otherwise, it returns false.
      * 
      * @param URL - The URL to validate.
-     * @returns boolean - Whether the URL is valid or not.
+     * @return boolean - Whether the URL is valid or not.
      */
     public static boolean validateURL(String URL) {
-        
-        if ((URL.startsWith("https://") || URL.startsWith("https://youtu.be") || URL.startsWith("https://www.youtube.com") || URL.startsWith("https://youtube.com")) && URL.length() <= 200) {
-			return true;
-        } else {
-            return false;
-        }
+        return (!URL.startsWith("https://") && !URL.startsWith("https://youtu.be") && !URL.startsWith("https://www.youtube.com") && !URL.startsWith("https://youtube.com")) || URL.length() > 200;
     }
 
-	/*
+	/**
      * Check if the URL is a valid YouTube link using RegEx.
-     * @param URL
+     * @param URL the URL to check if it is a valid YouTube link
      * @return boolean true if the URL is a valid YouTube link, false if it is not.
      */
     public static boolean isYouTubeLink(String URL) {
-        return URL.matches("^(https?\\:\\/\\/)?(www\\.)?(youtube\\.com|youtu\\.?be)\\/.+$");
+        return URL.matches("^(https?://)?(www\\.)?(youtube\\.com|youtu\\.?be)/.+$");
     }
 }
 

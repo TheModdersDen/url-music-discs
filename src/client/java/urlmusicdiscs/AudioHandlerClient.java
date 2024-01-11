@@ -9,19 +9,35 @@ import java.util.concurrent.CompletableFuture;
 
 public class AudioHandlerClient {
 
+    /**
+     * Check if the audio file exists in the client_downloads folder.
+     * @param urlName the URL of the audio file to check
+     * @return boolean if the audio file exists
+     */
     public boolean checkForAudioFile(String urlName) {
         String hashedName = Hashing.Sha256(urlName);
-
-        File audio = new File(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toString());
-
-        return audio.exists();
+        try {
+            if (!Files.exists(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/")))
+            {
+                Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/"));
+            } else {
+                File audio = new File(FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toString());
+                if (audio.exists()) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 
     /**
-     * @param urlName
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
+     *
+     * @param urlName the URL of the audio file to download
+     * @return boolean if the download was successful
+     * @throws IOException if the URL is invalid
+     * @throws InterruptedException if the download is interrupted
      */
     public CompletableFuture<Boolean> downloadAudioFile(String urlName) throws IOException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
@@ -31,7 +47,7 @@ public class AudioHandlerClient {
             File audioOut = new File(FabricLoader.getInstance().getConfigDir().toAbsolutePath()
                     .resolve("urlmusicdiscs/client_downloads/" + hashedName + ".ogg").toString());
 
-            if (URLMusicDiscs.validateURL(urlName) == false || urlName.isEmpty()) {
+            if (URLMusicDiscs.validateURL(urlName) || urlName.isEmpty()) {
                 return false;
             } else {
                 if (URLMusicDiscs.isYouTubeLink(urlName)) {
@@ -82,6 +98,12 @@ public class AudioHandlerClient {
 
     }
 
+    /**
+     * Get the audio file from the client_downloads folder.
+     * @param urlName the URL of the audio file to get the InputStream of
+     * @return the InputStream of the audio file
+     * @throws IOException if the URL is invalid and therefore cannot create an InputStream
+     */
     public InputStream getAudioInputStream(String urlName) throws IOException {
         String hashedName = Hashing.Sha256(urlName);
         InputStream fileStream;

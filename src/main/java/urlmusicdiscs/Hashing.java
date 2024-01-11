@@ -6,6 +6,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Hashing {
+
+    /**
+     * Get the SHA-256 hash of a string.
+     * @param input the string to hash
+     * @return byte[] the SHA-256 hash of the string
+     * @throws NoSuchAlgorithmException if the SHA-256 algorithm is not found
+     */
     public static byte[] getSHA(String input) throws NoSuchAlgorithmException
     {
         // Static getInstance method is called with hashing SHA
@@ -17,6 +24,11 @@ public class Hashing {
         return md.digest(input.getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * Convert a byte array to a hexadecimal string.
+     * @param hash the byte array to convert
+     * @return String the hexadecimal string
+     */
     public static String toHexString(byte[] hash)
     {
         // Convert byte array into signum representation
@@ -34,6 +46,11 @@ public class Hashing {
         return hexString.toString();
     }
 
+    /**
+     * Get the SHA-256 hash of a string.
+     * @param input the string to hash
+     * @return String the SHA-256 hash of the string
+     */
     public static String Sha256(String input) {
         try {
             return toHexString(getSHA(input));

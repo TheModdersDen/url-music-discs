@@ -18,19 +18,53 @@ import org.lwjgl.glfw.GLFW;
 import java.util.Objects;
 
 public class MusicDiscScreen extends Screen {
+
+    /**
+     * The texture for the record input GUI.
+     */
     private static final Identifier TEXTURE = new Identifier(URLMusicDiscs.MOD_ID, "textures/gui/record_input.png");
+
+    /**
+     * The texture for the text field.
+     */
     private static final Identifier TEXT_FIELD_TEXTURE = new Identifier("minecraft", "container/anvil/text_field");
+
+    /**
+     * The text field widget.
+     */
     private TextFieldWidget nameField;
 
+    /**
+     * The width of the background.
+     */
     int backgroundWidth = 176;
+
+    /**
+     * The height of the background.
+     */
     int backgroundHeight = 44;
+
+    /**
+     *  The default text for the text field.
+     */
     String inputDefaultText;
 
+    /**
+     * Constructor for the MusicDiscScreen class.
+     * @param title the title
+     * @param player the player
+     * @param item the item
+     * @param inputDefaultText the default text for the text field
+     */
     protected MusicDiscScreen(Text title, PlayerEntity player, ItemStack item, String inputDefaultText) {
         super(title);
         this.inputDefaultText = inputDefaultText;
     }
 
+    /**
+     * Called when the screen is opened and initializes the text field.
+     * This updates the text field position.
+     */
     public void updateTextPosition() {
         if (textRenderer == null) {
             return;
@@ -52,6 +86,12 @@ public class MusicDiscScreen extends Screen {
         this.nameField.setEditable(true);
     }
 
+    /**
+     * Called when the screen is resized.
+     * @param client MinecraftClient the client
+     * @param width int the width
+     * @param height int the height
+     */
     @Override
     public void resize(MinecraftClient client, int width, int height) {
         super.resize(client, width, height);
@@ -61,6 +101,13 @@ public class MusicDiscScreen extends Screen {
         this.nameField.setText(string);
     }
 
+    /**
+     * Called when the screen is closed.
+     * @param keyCode int the key code
+     * @param scanCode int the scan code
+     * @param modifiers int the modifiers
+     * @return boolean if the key was pressed
+     */
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) {
@@ -82,9 +129,20 @@ public class MusicDiscScreen extends Screen {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
+    /**
+     * Called when the text field is renamed.
+     * @param s the string that was renamed (String)
+     */
     private void onRenamed(String s) {
     }
 
+    /**
+     * Called when the screen is rendered.
+     * @param context the draw context
+     * @param mouseX the mouse x position
+     * @param mouseY the mouse y position
+     * @param delta the delta
+     */
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);

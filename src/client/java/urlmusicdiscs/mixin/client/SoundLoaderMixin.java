@@ -20,6 +20,13 @@ import java.util.concurrent.CompletionException;
 
 @Mixin(SoundLoader.class)
 public class SoundLoaderMixin {
+
+	/**
+	 * Load streamed audio from a URL.
+	 * @param id the identifier of the audio file (Identifier)
+	 * @param repeatInstantly if the audio should repeat instantly (boolean)
+	 * @param cir the callback info returnable (CallbackInfoReturnable)
+	 */
 	@Inject(at = @At("HEAD"), method = "loadStreamed", cancellable = true)
 	public void loadStreamed(Identifier id, boolean repeatInstantly, CallbackInfoReturnable<CompletableFuture<AudioStream>> cir) {
 		if (!id.getNamespace().equals("urlmusicdiscs"))

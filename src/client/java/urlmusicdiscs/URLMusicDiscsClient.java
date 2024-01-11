@@ -13,8 +13,15 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class URLMusicDiscsClient implements ClientModInitializer {
+
+	/**
+	 * The HashMap of playing sounds.
+	 */
 	HashMap<Vec3d, FileSound> playingSounds = new HashMap<>();
 
+	/**
+	 * The Client Mod Initializer.
+	 */
 	@Override
 	public void onInitializeClient() {
 		// Download FFmpeg and YoutubeDL if they are not already downloaded.
@@ -25,7 +32,13 @@ public class URLMusicDiscsClient implements ClientModInitializer {
 			throw new RuntimeException(e);
 		}
 
-		// Client Music Played Event
+		/**
+		 * Client Music Started Event
+		 * @param client MinecraftClient the client
+		 * @param handler ClientPlayNetworkHandler the handler
+		 * @param buf PacketByteBuf the buffer
+		 * @param responseSender PacketSender the response sender
+		 */
 		ClientPlayNetworking.registerGlobalReceiver(URLMusicDiscs.CUSTOM_RECORD_PACKET_ID, (client, handler, buf, responseSender) -> {
 
 			BlockPos blockPos = buf.readBlockPos();
@@ -82,7 +95,13 @@ public class URLMusicDiscsClient implements ClientModInitializer {
 			});
 		});
 
-		// Client Open Record UI Event
+		/**
+		 * Client Music Stopped Event
+		 * @param client MinecraftClient the client
+		 * @param handler ClientPlayNetworkHandler the handler
+		 * @param buf PacketByteBuf the buffer
+		 * @param responseSender PacketSender the response sender
+		 */
 		ClientPlayNetworking.registerGlobalReceiver(URLMusicDiscs.CUSTOM_RECORD_GUI, (client, handler, buf, responseSender) -> {
 
 			ItemStack item = buf.readItemStack();

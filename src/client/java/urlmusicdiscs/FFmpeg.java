@@ -11,13 +11,35 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class FFmpeg {
+
+    /**
+     * Check if the ffmpeg executable exists in the ffmpeg folder.
+     * @throws IOException if the ffmpeg executable cannot be downloaded
+     */
     static void checkForExecutable() throws IOException {
+
+        // Get the ffmpeg directory:
         File FFmpegDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/ffmpeg/").toAbsolutePath().toFile();
 
         // Verify that the ffmpeg folder exists, and if it doesn't, create it:
         try {
-            FFmpegDirectory.mkdirs();
+            if (!FFmpegDirectory.exists())
+            {
+                // Create the ffmpeg directory:
+                boolean dirCreationSuccess = FFmpegDirectory.mkdirs();
+                if (!dirCreationSuccess) {
+                    URLMusicDiscs.LOGGER.error("Failed to create ffmpeg directory. Look at the stacktrace for more info.");
+                    throw new RuntimeException("Failed to create ffmpeg directory.");
+                } else {
+                    // The directory was created successfully, so log it (but in a debug message):
+                    URLMusicDiscs.LOGGER.debug("FFmpeg directory was created successfully.");
+                }
+            } else {
+                // The directory already exists, so log it (but in a debug message):
+                URLMusicDiscs.LOGGER.debug("FFmpeg directory exists and/or created successfully. Continuing...");
+            }
         } catch (Exception e) {
+            URLMusicDiscs.LOGGER.error("Failed to create ffmpeg directory. Stacktrace:\n" + e);
             throw new RuntimeException(e);
         }
 

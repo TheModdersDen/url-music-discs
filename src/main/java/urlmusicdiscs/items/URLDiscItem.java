@@ -23,10 +23,23 @@ import net.minecraft.world.event.GameEvent;
 import urlmusicdiscs.URLMusicDiscs;
 
 public class URLDiscItem extends MusicDiscItem {
+
+    /**
+     * Constructor for the URLDiscItem class.
+     * @param comparatorOutput the comparator output
+     * @param sound the sound to play
+     * @param settings the item settings
+     * @param lengthInSeconds the length of the song in seconds
+     */
     public URLDiscItem(int comparatorOutput, SoundEvent sound, Settings settings, int lengthInSeconds) {
         super(comparatorOutput, sound, settings, lengthInSeconds);
     }
 
+    /**
+     * Called when the item is used on a block.
+     * @param context the item usage context
+     * @return ActionResult the action result
+     */
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         BlockPos blockPos;
@@ -83,6 +96,10 @@ public class URLDiscItem extends MusicDiscItem {
         return ActionResult.success(world.isClient);
     }
 
+    /**
+     * Get the length of the song in ticks.
+     * @return int the length of the song in ticks (0 as a placeholder)
+     */
     @Override
     public int getSongLengthInTicks() {
         return 0;
