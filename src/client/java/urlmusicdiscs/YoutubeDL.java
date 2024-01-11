@@ -44,8 +44,8 @@ public class YoutubeDL {
      * Executes a command with yt-dlp.
      * @param arguments the arguments to pass to yt-dlp
      * @return the output of the command
-     * @throws IOException 
-     * @throws InterruptedException
+     * @throws IOException if the command cannot be executed
+     * @throws InterruptedException if the command is interrupted
      */
     public static String executeYoutubeDLCommand(String arguments) throws IOException, InterruptedException {
         URLMusicDiscs.LOGGER.info("Running yt-dlp with args: '" + arguments + "'");
