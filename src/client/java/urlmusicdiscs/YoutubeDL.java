@@ -35,19 +35,23 @@ public class YoutubeDL {
             }
 
             Files.copy(fileStream, YoutubeDLDirectory.toPath().resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
-        
+
+            if (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC) {
+                Runtime.getRuntime().exec("chmod +x '" + FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/youtubedl/").toAbsolutePath() + fileName + "'");
+            }
+
             fileStream.close();
         }
     }
 
     /**
      * Executes a command with yt-dlp.
+     *
      * @param arguments the arguments to pass to yt-dlp
-     * @return the output of the command
-     * @throws IOException if the command cannot be executed
+     * @throws IOException          if the command cannot be executed
      * @throws InterruptedException if the command is interrupted
      */
-    public static String executeYoutubeDLCommand(String arguments) throws IOException, InterruptedException {
+    public static void executeYoutubeDLCommand(String arguments) throws IOException, InterruptedException {
         URLMusicDiscs.LOGGER.info("Running yt-dlp with args: '" + arguments + "'");
         File YoutubeDLDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/youtubedl/").toAbsolutePath().toFile();
 
@@ -57,14 +61,9 @@ public class YoutubeDL {
 
         // https://stackoverflow.com/questions/5711084/java-runtime-getruntime-getting-output-from-executing-a-command-line-program
 
-        if (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC) {
-            Runtime.getRuntime().exec("chmod +x " + YoutubeDL);
-        }
-
         Process resultProcess = Runtime.getRuntime().exec(YoutubeDL + " " + arguments);
 
         resultProcess.waitFor();
 
-        return "";
     }
 }

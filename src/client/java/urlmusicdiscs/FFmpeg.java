@@ -76,6 +76,7 @@ public class FFmpeg {
                         return;
                     }
                 }
+
                 in.close();
             }
 
@@ -92,6 +93,10 @@ public class FFmpeg {
                 zipEntry = zipInput.getNextEntry();
             }
 
+            if (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC) {
+                Runtime.getRuntime().exec("chmod +x '" + FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/ffmpeg/").toAbsolutePath() + fileName + "'");
+            }
+
             zipFile.delete();
             zipInput.close();
         }
@@ -99,7 +104,8 @@ public class FFmpeg {
 
     static void executeFFmpegCommand(String arguments) throws IOException, InterruptedException {
 
-        URLMusicDiscs.LOGGER.info("Running FFMPEG with args: '" + arguments + "'");
+        if (URLMusicDiscs.DEBUG_MODE)
+            URLMusicDiscs.LOGGER.info("Running FFMPEG with args: '" + arguments + "'");
 
         File FFmpegDirectory = FabricLoader.getInstance().getConfigDir().resolve("urlmusicdiscs/ffmpeg/").toAbsolutePath().toFile();
 
@@ -108,10 +114,6 @@ public class FFmpeg {
         String FFmpeg = FFmpegDirectory.toPath().resolve(fileName).toAbsolutePath().toString();
 
         // https://stackoverflow.com/questions/5711084/java-runtime-getruntime-getting-output-from-executing-a-command-line-program
-
-        if (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC) {
-            Runtime.getRuntime().exec("chmod +x " + FFmpeg);
-        }
 
         Process resultProcess = Runtime.getRuntime().exec(FFmpeg + " " + arguments);
 

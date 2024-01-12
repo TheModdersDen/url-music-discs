@@ -73,6 +73,11 @@ public class URLMusicDiscs implements ModInitializer {
 	);
 
 	/**
+	 * The Debug Mode variable.
+	 */
+	public static final boolean DEBUG_MODE = true;
+
+	/**
 	 * Initialize the mod.
 	 */
 	@Override

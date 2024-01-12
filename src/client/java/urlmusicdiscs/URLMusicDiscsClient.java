@@ -12,12 +12,23 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
+import org.apache.commons.io.FilenameUtils;
+
 public class URLMusicDiscsClient implements ClientModInitializer {
 
 	/**
 	 * The HashMap of playing sounds.
 	 */
 	HashMap<Vec3d, FileSound> playingSounds = new HashMap<>();
+
+	/**
+	 * Gets the file extension of a file.
+	 * @param filename the filename
+	 * @return String the file extension of the filename provided
+	 */
+	public static String getFileExtension(String filename) {
+		return FilenameUtils.getExtension(filename);
+	}
 
 	/**
 	 * The Client Mod Initializer.
@@ -91,7 +102,17 @@ public class URLMusicDiscsClient implements ClientModInitializer {
 
 				playingSounds.put(blockPosition, fileSound);
 
+				if (URLMusicDiscs.DEBUG_MODE) {
+					URLMusicDiscs.LOGGER.info("FileURL: " + fileUrl + "\n");
+
+					URLMusicDiscs.LOGGER.info("Playing sound: " + fileSound.getId().toString());
+				}
+				
+				
 				client.getSoundManager().play(fileSound);
+				
+				if (URLMusicDiscs.DEBUG_MODE)
+					URLMusicDiscs.LOGGER.info("#1: Music should be playing now. :)");
 			});
 		});
 

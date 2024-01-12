@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import urlmusicdiscs.URLMusicDiscs;
 
+import java.util.Objects;
+
 @Mixin(JukeboxBlockEntity.class)
 public class JukeboxMixin {
 
@@ -18,7 +20,7 @@ public class JukeboxMixin {
 	 * Cancels the dropRecord method and sends a packet to the client to stop the music.
 	 * @param ci the callback info (CallbackInfo)
 	 */
-	@Inject(at = @At("TAIL"), method = "dropRecord", cancellable = true)
+	@Inject(at = @At("TAIL"), method = "dropRecord")
 	public void dropRecord(CallbackInfo ci) {
 		JukeboxBlockEntity jukebox = (JukeboxBlockEntity)(Object)this;
 
@@ -26,7 +28,7 @@ public class JukeboxMixin {
 		bufInfo.writeBlockPos(jukebox.getPos());
 		bufInfo.writeString("");
 
-        jukebox.getWorld().getPlayers().forEach(playerEntity1 -> {
+        Objects.requireNonNull(jukebox.getWorld()).getPlayers().forEach(playerEntity1 -> {
 			ServerPlayNetworking.send((ServerPlayerEntity) playerEntity1, URLMusicDiscs.CUSTOM_RECORD_PACKET_ID, bufInfo);
 		});
     }

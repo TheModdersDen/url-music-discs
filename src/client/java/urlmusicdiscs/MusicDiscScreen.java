@@ -27,7 +27,7 @@ public class MusicDiscScreen extends Screen {
     /**
      * The texture for the text field.
      */
-    private static final Identifier TEXT_FIELD_TEXTURE = new Identifier("minecraft", "container/anvil/text_field");
+    private static final Identifier TEXT_FIELD_TEXTURE = new Identifier("minecraft", "container/anvil/text_field.png");
 
     /**
      * The text field widget.
